@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -43,6 +43,7 @@ Oppgaver
 </ol>
 <table id="tasksTable"></table>
 <p>
+    <input id="theOneInCharge" type="text"/>
     <input id="taskDescription" type="text"/><button onclick="addTask()">Legg til oppgave</button>
 </p>
 <script>
@@ -55,9 +56,11 @@ Oppgaver
 
     // Controller
     var taskDescriptionInput = document.getElementById('taskDescription');
+    var nameInCharge = document.getElementById('theOneInCharge');
 
     function addTask() {
         tasks.push({
+            name : nameInCharge.value,
             description: taskDescriptionInput.value,
             isDone: false
         });
@@ -72,6 +75,7 @@ Oppgaver
     function show() {
         let html = `
                         <tr>
+                            <th>Person</th>
                             <th>Oppgave</th>
                             <th>Gjort</th>
                             <th></th>
@@ -87,6 +91,7 @@ Oppgaver
         const checkedHtml = task.isDone ? 'checked="checked"' : '';
         if (!task.editMode)
             return `<tr>
+                            <td>${task.name}</td>
                             <td>${task.description}</td>
                             <td><input onchange="changeIsDone(this, ${i})" type="checkbox" ${checkedHtml} /></td>
                             <td>
@@ -96,6 +101,7 @@ Oppgaver
                         </tr>
                         `;
         return `<tr>
+                            <td><input id="editDescription${i}" type="text" value="${task.name}"/></td>
                             <td><input id="editDescription${i}" type="text" value="${task.description}"/></td>
                             <td><input onchange="changeIsDone(this, ${i})" type="checkbox" ${checkedHtml} /></td>
                             <td>
@@ -128,6 +134,7 @@ Oppgaver
         task.editMode = false;
         show();
     }
+
 </script>
 </body>
 </html>
