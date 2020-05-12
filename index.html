@@ -26,7 +26,7 @@
     </style>
 </head>
 <body>
-<input type="date"/>
+
 Oppgaver
 <ol>
     <li>
@@ -43,26 +43,30 @@ Oppgaver
 </ol>
 <table id="tasksTable"></table>
 <p>
-    <input id="theOneInCharge" type="text"/>
-    <input id="taskDescription" type="text"/><button onclick="addTask()">Legg til oppgave</button>
+    <input id="dateTaskAdded" type="date"/><input id="theOneInCharge" type="text" placeholder="Plante"/>
+    <input id="taskDescription" type="text" placeholder="Oppgave"/><button onclick="addTask()">Legg til oppgave</button>
 </p>
 <script>
     // Model
     var tasks = [
-        { name: 'Quercus robur' , description: 'Potte om', isDone: true },
-        { name: 'Pinus sylvestris' , description: 'Vanne', isDone: false },
-        { name: 'Picea abies' , description: 'Beskjare', isDone: false },
+        { date: '12.05.2020', name: 'Quercus robur' , description: 'Potte om', isDone: true , donedate: '' },
+        { date: '12.05.2020', name: 'Pinus sylvestris' , description: 'Vanne', isDone: false , donedate: ''},
+        { date: '12.05.2020', name: 'Picea abies' , description: 'Beskjare', isDone: false , donedate: ''},
     ];
 
     // Controller
     var taskDescriptionInput = document.getElementById('taskDescription');
     var nameInCharge = document.getElementById('theOneInCharge');
+    var dateTaskAdded = document.getElementById('dateTaskAdded');
+
 
     function addTask() {
         tasks.push({
+            date: dateTaskAdded.value,
             name : nameInCharge.value,
             description: taskDescriptionInput.value,
-            isDone: false
+            isDone: false,
+            donedate: ''
         });
         taskDescriptionInput.value = '';
         show();
@@ -76,10 +80,11 @@ Oppgaver
         let html = `
                         <tr>
                             <th>Frist</th>
-                            <th>Person</th>
+                            <th>Plante</th>
                             <th>Oppgave</th>
                             <th>Gjort</th>
                             <th></th>
+                            <th>Gjort dato</th>
                         </tr>`;
         for (let i = 0; i < tasks.length; i++) {
             html += createHtmlRow(i);
@@ -92,13 +97,16 @@ Oppgaver
         const checkedHtml = task.isDone ? 'checked="checked"' : '';
         if (!task.editMode)
             return `<tr>
+                            <td>${task.date}</td>
                             <td>${task.name}</td>
                             <td>${task.description}</td>
+                            
                             <td><input onchange="changeIsDone(this, ${i})" type="checkbox" ${checkedHtml} /></td>
                             <td>
                                 <button onclick="deleteTask(${i})">Slett</button>
                                 <button onclick="editTask(${i})">Rediger</button>
                             </td>
+                            <td>${task.donedate}</td>
                         </tr>
                         `;
         return `<tr>
@@ -113,7 +121,17 @@ Oppgaver
     }
 
     function changeIsDone(checkbox, index) {
+        var today = new Date();
+        datino =
+          today.getDate() +
+          "/" +
+          (today.getMonth() + 1) +
+          "/" +
+          today.getFullYear();
+
         tasks[index].isDone = checkbox.checked;
+        const task = tasks[index];
+        task.donedate = datino;
         show();
     }
 
