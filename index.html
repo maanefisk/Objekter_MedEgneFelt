@@ -49,9 +49,9 @@ Oppgaver
 <script>
     // Model
     var tasks = [
-        { description: 'Handle til middag', isDone: true },
-        { description: 'Lage middag', isDone: false },
-        { description: 'Spise middag', isDone: false },
+        { name: 'Quercus robur' , description: 'Potte om', isDone: true },
+        { name: 'Pinus sylvestris' , description: 'Vanne', isDone: false },
+        { name: 'Picea abies' , description: 'Beskjare', isDone: false },
     ];
 
     // Controller
@@ -75,6 +75,7 @@ Oppgaver
     function show() {
         let html = `
                         <tr>
+                            <th>Frist</th>
                             <th>Person</th>
                             <th>Oppgave</th>
                             <th>Gjort</th>
@@ -101,11 +102,11 @@ Oppgaver
                         </tr>
                         `;
         return `<tr>
-                            <td><input id="editDescription${i}" type="text" value="${task.name}"/></td>
+                            <td><input id="theOneInCharge${i}" type="text" value="${task.name}"/></td>
                             <td><input id="editDescription${i}" type="text" value="${task.description}"/></td>
                             <td><input onchange="changeIsDone(this, ${i})" type="checkbox" ${checkedHtml} /></td>
                             <td>
-                                <button onclick="updateTask(${i})">Lagre</button>
+                                <button onclick="updateTask(${i}),updateName(${i})">Lagre</button>
                             </td>
                         </tr>
                         `;
@@ -128,9 +129,12 @@ Oppgaver
 
     function updateTask(index) {
         const id = `editDescription${index}`;
+        const nameid = `theOneInCharge${index}`;
         const inputTag = document.getElementById(id);
+        const inputTagName = document.getElementById(nameid);
         const task = tasks[index];
         task.description = inputTag.value;
+        task.name = inputTagName.value;
         task.editMode = false;
         show();
     }
