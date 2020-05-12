@@ -132,6 +132,7 @@ Oppgaver
         tasks[index].isDone = checkbox.checked;
         const task = tasks[index];
         task.donedate = datino;
+        if (!checkbox.checked){task.donedate=''}
         show();
     }
 
